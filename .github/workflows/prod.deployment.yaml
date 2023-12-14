@@ -14,14 +14,10 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           script: |
             cd server
-            echo "MONGO_URI=${{ secrets.MONGO_URI }}" > .env
-            echo "PORT=${{ secrets.PORT }}" >> .env
-            echo "SOCKET_URI=${{ secrets.SOCKET_URI }}" >> .env
-            echo "RAZORPAY_WEBHOOK_SECRET=${{ secrets.RAZORPAY_WEBHOOK_SECRET }}" >> .env
             cd razor_webhook_tinker
             git fetch origin main
             git reset --hard origin/main
-            docker compose -f docker-compose.yaml down
-            docker compose -f docker-compose.yaml up --build -d 
+            docker compose down
+            docker compose up --build -d 
             exit
             
