@@ -13,6 +13,12 @@ jobs:
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           script: |
+            su ubuntu
+            cd server
+            echo "MONGO_URI=${{ secrets.MONGO_URI }}" > .env
+            echo "PORT=${{ secrets.PORT }}" >> .env
+            echo "SOCKET_URI=${{ secrets.SOCKET_URI }}" >> .env
+            echo "RAZORPAY_WEBHOOK_SECRET=${{ secrets.RAZORPAY_WEBHOOK_SECRET }}" >> .env
             cd razor_webhook_tinker
             git fetch origin main
             git reset --hard origin/main
