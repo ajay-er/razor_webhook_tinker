@@ -1,0 +1,21 @@
+name: Deploying To Production
+on:
+  push:
+    branches: [main]
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: ssh and rolling out deployment
+        uses: appleboy/ssh-action@v0.1.2
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          script: |
+            cd razor_webhook_tinker
+            git fetch origin main
+            git reset --hard origin/main
+            docker compose -f docker-compose.yaml down
+            docker compose -f docker-compose.yaml up --build -d 
+            exit
