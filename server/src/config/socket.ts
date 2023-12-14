@@ -10,7 +10,7 @@ class SocketManager {
             SocketManager.io = new Server(server, {
                 path: '/razorpay/socket.io',
                 cors: {
-                    origin: process.env.SOCKET_URI,
+                    origin: '*',
                 },
             });
 
