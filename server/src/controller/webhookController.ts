@@ -35,13 +35,13 @@ export const webHookCharged = async (req: Request, res: Response) => {
     return res.status(400).json({
       status: "Signature not valid.",
     });
-  
+
   const subscription = payload.payment.entity;
   const amount = payload.payment.entity.amount;
   const subscriptionId = payload?.subscription?.entity?.id;
   const nameArray = subscription.notes || [];
   const email = subscription.email;
-  const eventName = req.body['event'];
+  const eventName = req.body["event"];
   let name = "no-name";
 
   for (const note of nameArray) {
@@ -51,15 +51,19 @@ export const webHookCharged = async (req: Request, res: Response) => {
     }
   }
 
-  emitSubscriptionSuccess({ amountDonated: amount, subscriberName: name });
+  emitSubscriptionSuccess({
+    amountDonated: amount,
+    subscriberName: name,
+    subscriberEmail: email,
+  });
   // db operations
   await SubscriptionModel.create({
     amount,
     subscriptionId,
     name,
-    email
+    email,
   });
 
-  await EventModel.create({eventId:receivedEventId , name:eventName})
+  await EventModel.create({ eventId: receivedEventId, name: eventName });
   res.json({ ok: "OK" });
 };

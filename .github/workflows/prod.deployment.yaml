@@ -13,7 +13,6 @@ jobs:
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           script: |
-            cd server
             cd razor_webhook_tinker
             git fetch origin main
             git reset --hard origin/main
