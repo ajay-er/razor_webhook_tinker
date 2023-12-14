@@ -1,8 +1,8 @@
 import razorpay from "razorpay";
 import { Request, Response } from "express";
-import { EventModel } from "../db/event";
 import { SubscriptionModel } from "../db/Subscription";
 import { emitSubscriptionSuccess } from "../events/subscription.charged";
+import { EventModel } from "../db/Event";
 
 export const webHookCharged = async (req: Request, res: Response) => {
   const { payload } = req.body;
