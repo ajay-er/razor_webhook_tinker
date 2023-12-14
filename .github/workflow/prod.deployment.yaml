@@ -13,7 +13,6 @@ jobs:
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           script: |
-            su ubuntu
             cd server
             echo "MONGO_URI=${{ secrets.MONGO_URI }}" > .env
             echo "PORT=${{ secrets.PORT }}" >> .env
