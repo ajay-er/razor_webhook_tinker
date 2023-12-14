@@ -39,7 +39,8 @@ export const webHookCharged = async (req: Request, res: Response) => {
   const subscription = payload.payment.entity;
   const amount = payload.payment.entity.amount;
   const subscriptionId = payload?.subscription?.entity?.id;
-  const nameArray = subscription.notes || []
+  const nameArray = subscription.notes || [];
+  const email = subscription.email;
   const eventName = req.body['event'];
   let name = "no-name";
 
@@ -49,12 +50,14 @@ export const webHookCharged = async (req: Request, res: Response) => {
       break;
     }
   }
+
   emitSubscriptionSuccess({ amountDonated: amount, subscriberName: name });
   // db operations
   await SubscriptionModel.create({
     amount,
     subscriptionId,
     name,
+    email
   });
 
   await EventModel.create({eventId:receivedEventId , name:eventName})

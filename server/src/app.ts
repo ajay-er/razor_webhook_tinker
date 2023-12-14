@@ -17,7 +17,7 @@ app.use(express.json());
 
 app.use(morgan("dev"));
 
-SocketManager.setupSocketIO(httpServer);
+const io = SocketManager.setupSocketIO(httpServer);
 
 app.get("/", (req: Request, res: Response) => {
   res.json({ tinker: "tinker hub daa!" });
