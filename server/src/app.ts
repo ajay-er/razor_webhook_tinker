@@ -6,6 +6,8 @@ import { errorHandler } from "./error/error-handler";
 import { createServer } from "http";
 import { webHookCharged } from "./controller/webhookController";
 import SocketManager from "./config/socket";
+import { getTotalPayment } from "./controller/paymentController";
+import { getAllSubscriptions } from "./controller/subscriptionController";
 
 const app = express();
 
@@ -24,6 +26,10 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 app.post("/webhook/subscription/charged",webHookCharged);
+
+app.get('/payment/total',getTotalPayment)
+
+app.get('/subcription/all',getAllSubscriptions)
 
 app.use(errorHandler);
 
