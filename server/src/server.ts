@@ -13,8 +13,6 @@ const RAZORPAY_WEBHOOK_SECRET = process.env.RAZORPAY_WEBHOOK_SECRET;
         if (!MONGO_URI) throw new Error('Please provide MONGO_URI');
         console.clear();		
         await mongoConnect(MONGO_URI);
-
-        await getLatestSubscriptions();
         
         app.listen(PORT, async () => {
             

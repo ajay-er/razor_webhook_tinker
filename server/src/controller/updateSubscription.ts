@@ -1,5 +1,5 @@
 import { razorpay } from "../config/razorpay";
-import { ISubscription, SubscriptionModel } from "../db/Subscription";
+import { SubscriptionModel } from "../db/Subscription";
 
 export const getLatestSubscriptions = async (count: number = 10) => {
   const chunkSize = 100;
@@ -14,7 +14,6 @@ export const getLatestSubscriptions = async (count: number = 10) => {
 
   try {
     const settledPromises = await Promise.allSettled(promises);
-
     settledPromises.forEach((result) => {
       if (result.status === "fulfilled") {
         allSubscriptions = allSubscriptions.concat(result.value);
@@ -24,30 +23,31 @@ export const getLatestSubscriptions = async (count: number = 10) => {
     });
 
     for (const sub of allSubscriptions) {
-      let subId = sub.id;
-      console.log(subId);
-
-      const isSubPresent = await SubscriptionModel.findOne({
-        subscriptionId: subId,
-      });
-
-      if (!isSubPresent) {
-        try {
-          const plan = await razorpay.plans.fetch(sub.plan_id);
-          const amount = +plan.item.amount;
-          const customer = await razorpay.customers.fetch(sub.customer_id);
-          const email = customer.email;
-
-          const subscriptionToInsert = {
-            amount: amount,
-            subscriptionId: subId,
-            name: customer.name,
-            email,
-          };
-
-          await SubscriptionModel.create(subscriptionToInsert);
-        } catch (error) {
-          console.error("Error processing subscription:", error);
+      if(sub.status === 'active') {
+        let subId = sub.id;
+        console.log(subId);
+        const isSubPresent = await SubscriptionModel.findOne({
+          subscriptionId: subId,
+        });
+  
+        if (!isSubPresent) {
+          try {
+            const plan = await razorpay.plans.fetch(sub.plan_id);
+            const amount = +plan.item.amount;
+            const customer = await razorpay.customers.fetch(sub.customer_id);
+            const email = customer.email;
+  
+            const subscriptionToInsert = {
+              amount: amount,
+              subscriptionId: subId,
+              name: customer.name,
+              email,
+            };
+  
+            await SubscriptionModel.create(subscriptionToInsert);
+          } catch (error) {
+            console.error("Error processing subscription:", error);
+          }
         }
       }
     }
