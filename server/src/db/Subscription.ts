@@ -8,7 +8,7 @@ interface ISubscription extends Document {
 }
 
 const subscriptionSchema = new Schema<ISubscription>({
-  subscriptionId: { type: String},
+  subscriptionId: { type: String , unique:true},
   amount: { type: Number, required: true },
   name: { type: String, required: true , default: 'no-name' },
   email: { type: String, required: true },
