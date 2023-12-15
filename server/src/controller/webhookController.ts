@@ -51,11 +51,14 @@ export const webHookCharged = async (req: Request, res: Response) => {
     }
   }
 
+  const toRupees = amount / 100; 
+
   emitSubscriptionSuccess({
-    amountDonated: amount,
+    amountDonated: toRupees,
     subscriberName: name,
     subscriberEmail: email,
   });
+  
   // db operations
   await SubscriptionModel.create({
     amount,
